@@ -13,7 +13,7 @@ npm install easy-validation-service
 ### Example Usage
 
 ```javascript
-const ValidationService = require("./index");
+const ValidationService = require("easy-validation-service");
 
 const registerUserValidators = {
   email: (value) => ValidationService.validateEmail(value),
