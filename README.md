@@ -13,7 +13,7 @@ npm install easy-validation-service
 ### Example Usage
 
 ```javascript
-const ValidationService = require("easy-validation-service");
+const ValidationService = require("./index");
 
 const registerUserValidators = {
   email: (value) => ValidationService.validateEmail(value),
@@ -36,6 +36,35 @@ const registerUserValidators = {
     ValidationService.validateString({ value, min: 1 }),
 };
 
+const registerUserValidatorsWithErrors = {
+  email: (value) => ({
+    isValid: ValidationService.validateEmail(value),
+    errors: ["Please provide a valid email"],
+  }),
+  //   name: (value) => ValidationService.validateString({ value, min: 2, max: 25 }),
+  //   password: (value) =>
+  //     ValidationService.validateString({
+  //       value,
+  //       min: 8,
+  //       max: 16,
+  //       noWhiteSpace: true,
+  //     }),
+  //   verifyPassword: (value, data) => value === data.password,
+  role: {
+    name: (value) => ({
+      isValid: ValidationService.isOneOf({
+        value,
+        options: ["role1", "role2"],
+      }),
+      errors: ["Please provide role1 or role2"],
+    }),
+  },
+  //   isBusiness: (value) => ValidationService.isBoolean(value),
+  //   address: (value) =>
+  //     ValidationService.isNullOrUndefinedOrEmpty(value) ||
+  //     ValidationService.validateString({ value, min: 1 }),
+};
+
 const firstUser = {
   name: "DimTzilop",
   email: "example@example.com",
@@ -49,11 +78,11 @@ const firstUser = {
 
 const secondUser = {
   name: "DimTzilop",
-  email: "example@example.com",
+  email: "example@ex2ample.com",
   password: "12345678",
   verifyPassword: "12345678",
   role: {
-    name: "role2",
+    name: "role1",
   },
   address: null,
   isBusiness: false,
@@ -79,6 +108,14 @@ console.log(ValidationService.validateBody(secondUser, registerUserValidators));
 
 console.log(ValidationService.validateBody(thirdUser, registerUserValidators));
 // false
+
+console.log(
+  ValidationService.validateBodyWithErrors(
+    thirdUser,
+    registerUserValidatorsWithErrors
+  )
+);
+// { isValid: false, errors: { role: { name: ["Please provide role1 or role2"] } } }
 ```
 
 ### Methods

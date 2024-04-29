@@ -1,4 +1,4 @@
-const BadRequest = require("../errors/badRequest");
+const BadRequest = require("./errors/badRequest");
 
 class ValidationService {
   static validateNumber({ value, min = -Infinity, max = Infinity }) {
@@ -118,7 +118,7 @@ class ValidationService {
         : [validators];
       return formattedValidators.every((validator) => {
         if (ValidationService.isObject(validator)) {
-          const { errors, isValid } = ValidationService.validateBody(
+          const { errors, isValid } = ValidationService.validateBodyWithErrors(
             data[key],
             validator,
             data
