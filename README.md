@@ -41,15 +41,7 @@ const registerUserValidatorsWithErrors = {
     isValid: ValidationService.validateEmail(value),
     errors: ["Please provide a valid email"],
   }),
-  //   name: (value) => ValidationService.validateString({ value, min: 2, max: 25 }),
-  //   password: (value) =>
-  //     ValidationService.validateString({
-  //       value,
-  //       min: 8,
-  //       max: 16,
-  //       noWhiteSpace: true,
-  //     }),
-  //   verifyPassword: (value, data) => value === data.password,
+
   role: {
     name: (value) => ({
       isValid: ValidationService.isOneOf({
@@ -59,10 +51,6 @@ const registerUserValidatorsWithErrors = {
       errors: ["Please provide role1 or role2"],
     }),
   },
-  //   isBusiness: (value) => ValidationService.isBoolean(value),
-  //   address: (value) =>
-  //     ValidationService.isNullOrUndefinedOrEmpty(value) ||
-  //     ValidationService.validateString({ value, min: 1 }),
 };
 
 const firstUser = {
