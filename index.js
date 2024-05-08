@@ -1,5 +1,3 @@
-const BadRequest = require("./errors/badRequest");
-
 class ValidationService {
   static validateNumber({ value, min = -Infinity, max = Infinity }) {
     return this.isNumber(value) && value >= min && value <= max;
@@ -194,7 +192,7 @@ class ValidationService {
           validatorsConfig
         );
         if (!isValid) {
-          throw new BadRequest(errors);
+          throw new Error(errors);
         }
         next();
       } catch (error) {
@@ -229,7 +227,7 @@ class ValidationService {
         ValidationService.isObject(req.body) &&
         Object.keys(req.body).length === 0
       ) {
-        next(new BadRequest());
+        next(new Error());
       } else {
         next();
       }
