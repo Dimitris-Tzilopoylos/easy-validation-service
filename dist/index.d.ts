@@ -60,6 +60,9 @@ declare class ValidationService {
   static isDomain(value: any): boolean;
   static isValidPhoneNumber(value: any): boolean;
   static isValidDate(value: any): boolean;
+  static isValidIPv4(value: any): boolean;
+  static isValidIPv6(value: any): boolean;
+  static isValidIP(value: any): boolean;
   static throwAsyncResult(error: any, result: any): void;
   static validateMW(
     validatorsConfig: any

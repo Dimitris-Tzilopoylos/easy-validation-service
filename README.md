@@ -199,3 +199,15 @@ console.log(
 #### `isValidDate(value)`
 
 - Checks if a given value is a valid date or valid date string.
+
+#### `isValidIPv4(value)`
+
+- Checks if a given value is a valid IP v4 string
+
+#### `isValidIPv6(value)`
+
+- Checks if a given value is a valid IP v6 string
+
+#### `isValidIP(value)`
+
+- Checks if a given value is a valid IP v4 or v6 string

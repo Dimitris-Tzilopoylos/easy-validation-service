@@ -167,6 +167,23 @@ class ValidationService {
     const date = new Date(dateStr);
     return !isNaN(date.getTime());
   }
+  static isValidIPv4(value) {
+    const ipv4Regex =
+      /^(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])(\.(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])){3}$/;
+    return ValidationService.isString(value) && ipv4Regex.test(value);
+  }
+
+  static isValidIPv6(value) {
+    const ipv6Regex = /^([a-fA-F0-9]{1,4}:){7}([a-fA-F0-9]{1,4}|:)$/i;
+    return ValidationService.isString(value) && ipv6Regex.test(value);
+  }
+  static isValidIP(value) {
+    return (
+      (ValidationService.isString(value) &&
+        ValidationService.isValidIPv4(value)) ||
+      ValidationService.isValidIPv6(value)
+    );
+  }
   static throwAsyncResult(error, result) {
     if (error) throw error;
     if (!result)
