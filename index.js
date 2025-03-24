@@ -1,21 +1,23 @@
 class ValidationService {
   static validateNumber({ value, min = -Infinity, max = Infinity }) {
-    return this.isNumber(value) && value >= min && value <= max;
+    return ValidationService.isNumber(value) && value >= min && value <= max;
   }
   static validateString({
     value,
     min = 0,
     max = Infinity,
     noWhiteSpace = false,
+    trimStringBeforeLengthCheck = false,
   }) {
-    if (!this.isString(value)) return false;
+    if (!ValidationService.isString(value)) return false;
     if (noWhiteSpace) {
       if (value.includes(" ")) return false;
     }
-    if (value?.length < min) return false;
-    if (value?.length > max) return false;
+    if (trimStringBeforeLengthCheck) {
+      value = value.trim();
+    }
 
-    return true;
+    return value?.length >= min && value.length <= max;
   }
 
   static isIntOrStringInt(value) {
@@ -57,23 +59,30 @@ class ValidationService {
   static isNull(value) {
     return (
       value === null ||
-      (this.isString(value) && value?.toLowerCase()?.trim() === "null")
+      (ValidationService.isString(value) &&
+        value?.toLowerCase()?.trim() === "null")
     );
   }
 
   static isNullOrUndefined(value) {
-    return this.isNull(value) || this.isUndefined(value);
+    return (
+      ValidationService.isNull(value) || ValidationService.isUndefined(value)
+    );
   }
 
   static isNullOrUndefinedOrEmpty(value) {
-    return this.isNull(value) || this.isUndefined(value) || value === "";
+    return (
+      ValidationService.isNull(value) ||
+      ValidationService.isUndefined(value) ||
+      value === ""
+    );
   }
 
   static isObject(value) {
     return (
       !!value &&
       typeof value === "object" &&
-      !this.isNullOrUndefined(value) &&
+      !ValidationService.isNullOrUndefined(value) &&
       !Array.isArray(value) &&
       !(value instanceof Date)
     );
@@ -91,7 +100,10 @@ class ValidationService {
       );
   }
   static validateBody(data, validators, parentData) {
-    if (!this.isObject(data) || !this.isObject(validators)) {
+    if (
+      !ValidationService.isObject(data) ||
+      !ValidationService.isObject(validators)
+    ) {
       return false;
     }
     return Object.entries(validators).every(([key, validators]) => {
@@ -99,15 +111,18 @@ class ValidationService {
         ? validators
         : [validators];
       return formattedValidators.every((validator) =>
-        this.isObject(validator)
-          ? this.validateBody(data[key], validator, data)
+        ValidationService.isObject(validator)
+          ? ValidationService.validateBody(data[key], validator, data)
           : validator(data[key], data, parentData)
       );
     });
   }
 
   static validateBodyWithErrors(data, validators, parentData) {
-    if (!this.isObject(data) || !this.isObject(validators)) {
+    if (
+      !ValidationService.isObject(data) ||
+      !ValidationService.isObject(validators)
+    ) {
       return false;
     }
     const preserveErrors = {};
@@ -191,7 +206,6 @@ class ValidationService {
       /^(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])(\.(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])){3}$/;
     return ValidationService.isString(value) && ipv4Regex.test(value);
   }
-
   static isValidIPv6(value) {
     const ipv6Regex = /^([a-fA-F0-9]{1,4}:){7}([a-fA-F0-9]{1,4}|:)$/i;
     return ValidationService.isString(value) && ipv6Regex.test(value);

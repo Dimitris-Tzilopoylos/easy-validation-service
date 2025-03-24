@@ -14,11 +14,13 @@ declare class ValidationService {
     min,
     max,
     noWhiteSpace,
+    trimStringBeforeLengthCheck,
   }: {
     value: any;
     min?: number;
     max?: number;
     noWhiteSpace?: boolean;
+    trimStringBeforeLengthCheck?: boolean;
   }): boolean;
   static isIntOrStringInt(value: any): boolean;
   static isOneOf({ value, options }: { value: any; options?: any[] }): boolean;
