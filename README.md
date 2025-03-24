@@ -191,3 +191,11 @@ console.log(
 #### `isFunction(value)`
 
 - Checks if a given value is a function.
+
+#### `isValidPhoneNumber(value)`
+
+- Checks if a given value is a phone number.
+
+#### `isValidDate(value)`
+
+- Checks if a given value is a valid date or valid date string.

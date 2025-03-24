@@ -159,6 +159,14 @@ class ValidationService {
       /^(https?:\/\/)?([\da-z.-0-9]+)\.([a-z.]{2,6})([\/\w.-]*)*\/?$/;
     return pattern.test(value);
   }
+  static isValidPhoneNumber(phone) {
+    const regex = /^\+?[0-9]{7,15}$/;
+    return ValidationService.isString(phone) && regex.test(phone);
+  }
+  static isValidDate(dateStr) {
+    const date = new Date(dateStr);
+    return !isNaN(date.getTime());
+  }
   static throwAsyncResult(error, result) {
     if (error) throw error;
     if (!result)

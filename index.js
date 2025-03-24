@@ -71,9 +71,11 @@ class ValidationService {
 
   static isObject(value) {
     return (
+      !!value &&
+      typeof value === "object" &&
       !this.isNullOrUndefined(value) &&
       !Array.isArray(value) &&
-      typeof value === "object"
+      !(value instanceof Date)
     );
   }
 
@@ -88,7 +90,6 @@ class ValidationService {
         /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
       );
   }
-
   static validateBody(data, validators, parentData) {
     if (!this.isObject(data) || !this.isObject(validators)) {
       return false;
@@ -177,7 +178,14 @@ class ValidationService {
 
     return pattern.test(value);
   }
-
+  static isValidPhoneNumber(phone) {
+    const regex = /^\+?[0-9]{7,15}$/;
+    return ValidationService.isString(phone) && regex.test(phone);
+  }
+  static isValidDate(dateStr) {
+    const date = new Date(dateStr);
+    return !isNaN(date.getTime());
+  }
   static throwAsyncResult(error, result) {
     if (error) throw error;
     if (!result) throw { message: "NOT_FOUND", status: 404 };
